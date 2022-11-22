@@ -12,6 +12,14 @@ var Mascotas = /** @class */ (function () {
     Mascotas.prototype.getEspecie = function () {
         return this.especie;
     };
+    Mascotas.prototype.asignarEspecie = function (especie) {
+        if (this.especie == "perro" || this.especie == "gato") {
+            console.log(this.especie);
+        }
+        else {
+            console.log("exótica");
+        }
+    };
     return Mascotas;
 }());
 var Cliente = /** @class */ (function () {
@@ -21,15 +29,22 @@ var Cliente = /** @class */ (function () {
         this.visitas = visitas;
         this.listaMascota = listaMascota;
     }
+    Cliente.prototype.getId = function () {
+        return this.id;
+    };
     Cliente.prototype.getVisitas = function () {
         return this.visitas;
     };
     Cliente.prototype.getListaMascota = function () {
         return this.listaMascota;
     };
-    Cliente.prototype.clienteVip = function () {
-        if (this.visitas >= 5) {
-            console.log("Con su cantidad de visitas usted es cliente Vip");
+    Cliente.prototype.setVisitas = function () {
+        if (this.visitas >= 0 && this.visitas <= 5) {
+            this.visitas = this.visitas;
+            console.log("Gracias por venir a Mascote.ar");
+        }
+        else {
+            console.log("Gracias por volver a Mascote.ar. Felicitaciones usted es cliente vip");
         }
     };
     Cliente.prototype.mostrarMascotas = function () {
@@ -69,27 +84,15 @@ for (var i = 0; i < datosMascota.getArregloString.length; i++) {
     cargarArreglo(datosMascota.getArregloString()[i], animal);
 }
 console.log(animal);
-// funcion crear aleatorio
-function crearAleatorio(max) {
-    return Math.floor(Math.random() * max);
-}
 // funcion cargar arreglo cliente
-function cargarCliente(elemento, arr, listaMascota) {
+function cargarCliente(elemento, arr, animal) {
     var datos = elemento.split(',');
-    var nombre = datos[1];
-    var telefono = Number(datos[2]);
-    var visitas = Number(datos[3]);
-    var arrayMascota = animal;
-    var nuevoCliente = new Cliente(nombre, telefono, visitas, listaMascota);
+    var nombre = datos[0];
+    var telefono = Number(datos[1]);
+    var visitas = Number(datos[2]);
+    var nuevoCliente = new Cliente(nombre, telefono, visitas, animal);
     arr.push(nuevoCliente);
     return arr;
-}
-var datosClientes = new GestorDeArchivos("cliente.txt");
-console.log(datosClientes);
-var arrayMascota = animal;
-var listaPersonas = [];
-for (var i = 0; i < datosClientes.getArregloString().length; i++) {
-    cargarCliente(datosClientes.getArregloString()[i], listaPersonas, animal);
 }
 var crearId = function (letra, lista) {
     var id = letra;
@@ -106,4 +109,11 @@ var crearId = function (letra, lista) {
     ;
     return id;
 };
-crearId("c", listaPersonas);
+var datosClientes = new GestorDeArchivos("cliente.txt");
+console.log(datosClientes);
+var listaPersonas = [];
+for (var i = 0; i < datosClientes.getArregloString().length; i++) {
+    cargarCliente(datosClientes.getArregloString()[i], listaPersonas, animal);
+    crearId("c", listaPersonas);
+}
+console.log(listaPersonas);
