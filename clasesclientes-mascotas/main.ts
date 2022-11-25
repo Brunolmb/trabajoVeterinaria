@@ -18,19 +18,19 @@ import * as fs from 'fs';
             return this.especie;
         }
         
-    public asignarEspecie(especie:string) {
+    public asignarEspecie() {
 
-            if (this.especie == "perro" || this.especie == "gato"){
+            if (this.especie === "perro" || this.especie === "gato"){
                 console.log (this.especie)
             } else  { 
                 console.log("exótica")
             }
         }
-     }
+      }
 
 
      class Cliente { 
-        private id : number;
+        private id : string;
         private nombre : string;
         private telefono : number;
         private visitas : number;
@@ -43,8 +43,8 @@ import * as fs from 'fs';
             this.listaMascota = listaMascota;
          }
 
-         public getId() : number { 
-            return this.id
+         public getId() : string { 
+            return this.id;
          }
        
     
@@ -56,9 +56,8 @@ import * as fs from 'fs';
             return this.listaMascota;
         }
     
-        public setVisitas(){
+        public setVisitas() : void{
             if (this.visitas >= 0 && this.visitas <=5){
-                this.visitas = this.visitas;
                 console.log("Gracias por venir a Mascote.ar");
             }else{
                 console.log("Gracias por volver a Mascote.ar. Felicitaciones usted es cliente vip");
@@ -109,10 +108,15 @@ function cargarArreglo(elemento: string, arr: Array<Mascotas>) : Array<Mascotas>
     let nuevaMascota : Mascotas = new Mascotas(nombre,especie); 
 
     arr.push(nuevaMascota);
+    nuevaMascota.asignarEspecie();
+   
 
     return arr;
 }
 
+
+
+ 
 
 let datosMascota : GestorDeArchivos = new GestorDeArchivos("mascotas.txt");
 
@@ -125,12 +129,11 @@ let animal : Array<Mascotas> = [];
 
 for(let i = 0; i <datosMascota.getArregloString.length; i++) { 
     cargarArreglo(datosMascota.getArregloString()[i], animal);
+
  }
 
   
  console.log(animal);
-
-
 
 
 // funcion cargar arreglo cliente
@@ -140,23 +143,29 @@ function cargarCliente(elemento: string, arr: Array<Cliente>, animal : Array<Mas
     
     let datos: string[] = elemento.split(',');
     let nombre: string = datos[0];
-    let telefono: number = Number(datos[1])
+    let telefono: number = Number(datos[1]);
     let visitas : number = Number(datos[2]);
+    
     
  
 
     let nuevoCliente : Cliente = new Cliente (nombre, telefono,visitas, animal);
+    
 
     arr.push(nuevoCliente);
+     nuevoCliente.setVisitas();
+   
 
     return arr;
 }
+
+
 let crearId = (letra :string, lista) => {
-    let id :string = letra;
+    let id :string = " ";
     for (let i :number = 0; i < 3; i++){
         let random :number = Math.floor(Math.random() * 10);
         id += random;
-    };
+     }
     for (let i :number = 0; i < lista.length; i++){
         if (id === lista[i].getId()){
             crearId(lista, letra);
@@ -179,6 +188,8 @@ let crearId = (letra :string, lista) => {
     crearId("c",listaPersonas);
  }
  console.log(listaPersonas);
+
+ 
 
 
 

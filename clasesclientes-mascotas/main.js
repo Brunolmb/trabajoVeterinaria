@@ -12,8 +12,8 @@ var Mascotas = /** @class */ (function () {
     Mascotas.prototype.getEspecie = function () {
         return this.especie;
     };
-    Mascotas.prototype.asignarEspecie = function (especie) {
-        if (this.especie == "perro" || this.especie == "gato") {
+    Mascotas.prototype.asignarEspecie = function () {
+        if (this.especie === "perro" || this.especie === "gato") {
             console.log(this.especie);
         }
         else {
@@ -40,7 +40,6 @@ var Cliente = /** @class */ (function () {
     };
     Cliente.prototype.setVisitas = function () {
         if (this.visitas >= 0 && this.visitas <= 5) {
-            this.visitas = this.visitas;
             console.log("Gracias por venir a Mascote.ar");
         }
         else {
@@ -75,6 +74,7 @@ function cargarArreglo(elemento, arr) {
     var especie = datos[1];
     var nuevaMascota = new Mascotas(nombre, especie);
     arr.push(nuevaMascota);
+    nuevaMascota.asignarEspecie();
     return arr;
 }
 var datosMascota = new GestorDeArchivos("mascotas.txt");
@@ -92,15 +92,15 @@ function cargarCliente(elemento, arr, animal) {
     var visitas = Number(datos[2]);
     var nuevoCliente = new Cliente(nombre, telefono, visitas, animal);
     arr.push(nuevoCliente);
+    nuevoCliente.setVisitas();
     return arr;
 }
 var crearId = function (letra, lista) {
-    var id = letra;
+    var id = " ";
     for (var i = 0; i < 3; i++) {
         var random = Math.floor(Math.random() * 10);
         id += random;
     }
-    ;
     for (var i = 0; i < lista.length; i++) {
         if (id === lista[i].getId()) {
             crearId(lista, letra);
