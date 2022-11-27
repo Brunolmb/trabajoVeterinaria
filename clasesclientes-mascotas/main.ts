@@ -17,13 +17,17 @@ import * as fs from 'fs';
     public getEspecie() : string { 
             return this.especie;
         }
+    
+    public setEspecie(nuevaEspecie: string) : void { 
+        this.especie = nuevaEspecie;
+    }
         
     public asignarEspecie() {
 
             if (this.especie === "perro" || this.especie === "gato"){
                 console.log (this.especie)
             } else  { 
-                console.log("exótica")
+                this.setEspecie("exótica");
             }
         }
       }
@@ -36,11 +40,13 @@ import * as fs from 'fs';
         private visitas : number;
         private listaMascota : Array <Mascotas>;
     
-        constructor ( nombre: string, telefono : number, visitas: number, listaMascota : Array<Mascotas>) { 
+        constructor ( nombre: string, telefono : number, visitas: number, id : string, listaMascota : Array<Mascotas>) { 
             this.nombre = nombre;
             this.telefono = telefono;
             this.visitas = visitas;
             this.listaMascota = listaMascota;
+            this.id = id;
+             
          }
 
          public getId() : string { 
@@ -56,12 +62,17 @@ import * as fs from 'fs';
             return this.listaMascota;
         }
     
-        public setVisitas() : void{
+        public setVisitas(nuevaVisitas) : void {
+            this.visitas= nuevaVisitas;
+        }
+           
+        public asignarCliente() {     
             if (this.visitas >= 0 && this.visitas <=5){
-                console.log("Gracias por venir a Mascote.ar");
-            }else{
-                console.log("Gracias por volver a Mascote.ar. Felicitaciones usted es cliente vip");
+                this.setVisitas(`Con 5 visitas usted será cliente VIP. Lleva ${this.visitas} Visitas. Lo esperamos pronto`);
+            }else{ 
+                this.setVisitas(`Ha alcanzado las 5 visitas. Felicidades usted es un cliente VIP`);
             }
+        
         }
     
     
@@ -78,7 +89,7 @@ import * as fs from 'fs';
       class GestorDeArchivos {
 
         private arregloString: string[];
-          setVisi: any;
+        
     
         constructor(txtFileLocation: string) {
     
@@ -127,13 +138,16 @@ let animal : Array<Mascotas> = [];
 
 
 
-for(let i = 0; i <datosMascota.getArregloString.length; i++) { 
+for(let i = 0; i <datosMascota.getArregloString().length; i++) { 
     cargarArreglo(datosMascota.getArregloString()[i], animal);
+    
 
  }
 
   
  console.log(animal);
+
+
 
 
 // funcion cargar arreglo cliente
@@ -145,35 +159,35 @@ function cargarCliente(elemento: string, arr: Array<Cliente>, animal : Array<Mas
     let nombre: string = datos[0];
     let telefono: number = Number(datos[1]);
     let visitas : number = Number(datos[2]);
-    
-    
- 
 
-    let nuevoCliente : Cliente = new Cliente (nombre, telefono,visitas, animal);
+    
+     let nuevoCliente : Cliente = new Cliente (nombre, telefono,visitas,crearId(arr), animal);
     
 
     arr.push(nuevoCliente);
-     nuevoCliente.setVisitas();
+     nuevoCliente.asignarCliente();
    
 
     return arr;
 }
 
 
-let crearId = (letra :string, lista) => {
+let crearId = ( lista) => {
     let id :string = " ";
     for (let i :number = 0; i < 3; i++){
         let random :number = Math.floor(Math.random() * 10);
         id += random;
-     }
+     } 
+     
     for (let i :number = 0; i < lista.length; i++){
         if (id === lista[i].getId()){
-            crearId(lista, letra);
+            crearId(lista);
         }
-    };
+     }
 
-    return id;
-}
+    return id; 
+};
+
 
 
  let datosClientes : GestorDeArchivos = new GestorDeArchivos("cliente.txt");
@@ -184,8 +198,9 @@ let crearId = (letra :string, lista) => {
  let listaPersonas : Array<Cliente> = [];
 
  for(let i = 0; i < datosClientes.getArregloString().length; i++) { 
-    cargarCliente(datosClientes.getArregloString()[i], listaPersonas,animal);
-    crearId("c",listaPersonas);
+    cargarCliente(datosClientes.getArregloString()[i], listaPersonas ,animal);
+    crearId(listaPersonas);
+    
  }
  console.log(listaPersonas);
 

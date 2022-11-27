@@ -12,22 +12,26 @@ var Mascotas = /** @class */ (function () {
     Mascotas.prototype.getEspecie = function () {
         return this.especie;
     };
+    Mascotas.prototype.setEspecie = function (nuevaEspecie) {
+        this.especie = nuevaEspecie;
+    };
     Mascotas.prototype.asignarEspecie = function () {
         if (this.especie === "perro" || this.especie === "gato") {
             console.log(this.especie);
         }
         else {
-            console.log("exótica");
+            this.setEspecie("exótica");
         }
     };
     return Mascotas;
 }());
 var Cliente = /** @class */ (function () {
-    function Cliente(nombre, telefono, visitas, listaMascota) {
+    function Cliente(nombre, telefono, visitas, id, listaMascota) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.visitas = visitas;
         this.listaMascota = listaMascota;
+        this.id = id;
     }
     Cliente.prototype.getId = function () {
         return this.id;
@@ -38,12 +42,15 @@ var Cliente = /** @class */ (function () {
     Cliente.prototype.getListaMascota = function () {
         return this.listaMascota;
     };
-    Cliente.prototype.setVisitas = function () {
+    Cliente.prototype.setVisitas = function (nuevaVisitas) {
+        this.visitas = nuevaVisitas;
+    };
+    Cliente.prototype.asignarCliente = function () {
         if (this.visitas >= 0 && this.visitas <= 5) {
-            console.log("Gracias por venir a Mascote.ar");
+            this.setVisitas("Con 5 visitas usted ser\u00E1 cliente VIP. Lleva ".concat(this.visitas, " Visitas. Lo esperamos pronto"));
         }
         else {
-            console.log("Gracias por volver a Mascote.ar. Felicitaciones usted es cliente vip");
+            this.setVisitas("Ha alcanzado las 5 visitas. Felicidades usted es un cliente VIP");
         }
     };
     Cliente.prototype.mostrarMascotas = function () {
@@ -80,7 +87,7 @@ function cargarArreglo(elemento, arr) {
 var datosMascota = new GestorDeArchivos("mascotas.txt");
 console.log(datosMascota);
 var animal = [];
-for (var i = 0; i < datosMascota.getArregloString.length; i++) {
+for (var i = 0; i < datosMascota.getArregloString().length; i++) {
     cargarArreglo(datosMascota.getArregloString()[i], animal);
 }
 console.log(animal);
@@ -90,12 +97,12 @@ function cargarCliente(elemento, arr, animal) {
     var nombre = datos[0];
     var telefono = Number(datos[1]);
     var visitas = Number(datos[2]);
-    var nuevoCliente = new Cliente(nombre, telefono, visitas, animal);
+    var nuevoCliente = new Cliente(nombre, telefono, visitas, crearId(arr), animal);
     arr.push(nuevoCliente);
-    nuevoCliente.setVisitas();
+    nuevoCliente.asignarCliente();
     return arr;
 }
-var crearId = function (letra, lista) {
+var crearId = function (lista) {
     var id = " ";
     for (var i = 0; i < 3; i++) {
         var random = Math.floor(Math.random() * 10);
@@ -103,10 +110,9 @@ var crearId = function (letra, lista) {
     }
     for (var i = 0; i < lista.length; i++) {
         if (id === lista[i].getId()) {
-            crearId(lista, letra);
+            crearId(lista);
         }
     }
-    ;
     return id;
 };
 var datosClientes = new GestorDeArchivos("cliente.txt");
@@ -114,6 +120,6 @@ console.log(datosClientes);
 var listaPersonas = [];
 for (var i = 0; i < datosClientes.getArregloString().length; i++) {
     cargarCliente(datosClientes.getArregloString()[i], listaPersonas, animal);
-    crearId("c", listaPersonas);
+    crearId(listaPersonas);
 }
 console.log(listaPersonas);
